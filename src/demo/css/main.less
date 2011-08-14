@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+
+@import "inc/html5reset";
+@import "inc/mixins";
+
+
+body {
+	font-family: Ubuntu, Arial, sans;
+	font-size: 16px;
+	color: #333;
+	
+	> h1 {
+		font-family: 'Cabin Sketch';
+		margin: 30px;
+		padding: 10px;
+		font-size: 3em;
+		border-bottom: 4px solid #eee;
+	}
+	
+	> div {
+		display: inline-block;
+		margin: 30px;
+		border: 2px solid #555;
+		font-size: 1.5em;
+		width: 250px;
+		height: 200px;
+		background-color: #fff;
+		cursor: pointer;
+	}
+}
+
+a, a:active, a:visited {
+	color: #e44d26;
+	text-decoration: none;
+	.transition( all 0.2s ease-in-out );
+
+	&:hover {
+		color: #ff8d38;
+	}
+}
+
+
