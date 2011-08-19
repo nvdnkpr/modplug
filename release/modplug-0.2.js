@@ -1,5 +1,5 @@
 /*
- * ModPlug %BUILD_VERSION%
+ * ModPlug 0.2
  * http://larsjung.de/modplug
  * 
  * provided under the terms of the MIT License

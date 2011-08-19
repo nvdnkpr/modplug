@@ -49,7 +49,6 @@
 		<!-- demo -->
 		<scripp.dir dir="${build.dir}/demo/css" />
 		<scripp.dir dir="${build.dir}/demo/js" />
-		<copy file="${build.dir}/${project.name}-${project.version}.min.js" tofile="${build.dir}/demo/${project.name}.js" />
 	</target>
 
 
@@ -57,7 +56,6 @@
 		<!-- demo -->
 		<scripp.dir dir="${build.dir}/demo/css" compress="false" />
 		<scripp.dir dir="${build.dir}/demo/js" compress="false" />
-		<copy file="${build.dir}/${project.name}-${project.version}.js" tofile="${build.dir}/demo/${project.name}.js" />
 	</target>
 
 

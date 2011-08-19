@@ -8,4 +8,9 @@ ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ## Changelog
 
+### v0.2 · *2011-08-19*
+
+* cleaned and redesigned
+
+
 ### v0.1 · *2011-08-15*
