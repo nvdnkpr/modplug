@@ -6,7 +6,12 @@
 
 			event.stopPropagation();
 			event.preventDefault();
-			$( this ).color();
+			
+			if ( event.button === 0 ) {
+				$( this ).color();
+			} else if ( event.button === 1 ) {
+				$( this ).color( "border" );
+			}
 		} );
 	} );
 

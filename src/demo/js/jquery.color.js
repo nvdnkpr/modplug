@@ -4,21 +4,15 @@
 ( function( $ ) {
 
 	var plugin = {
-
-			namespace: "color",
-	
 			statics: {
-	
 				front: function ( col ) {
 	
 					$( "html" ).css( "color", col || plugin.statics.random() );
 				},
-	
 				back: function ( col ) {
 	
 					$( "html" ).css( "background-color", col || plugin.statics.random() );
 				},
-	
 				random: function () {
 					
 					return "hsl(" + Math.floor( Math.random() * 360 ) + ",95%,75%)";
@@ -26,7 +20,6 @@
 			},
 	
 			methods: {
-	
 				front: function ( col ) {
 	
 					return this.each( function () {
@@ -34,7 +27,6 @@
 						$( this ).css( "color", col || plugin.statics.random() );
 					} );
 				},
-	
 				back: function ( col ) {
 	
 					return this.each( function () {
@@ -55,6 +47,6 @@
 			}
 		};
 	
-	new ModPlug( plugin );
+	$.ModPlug.plugin( "color", plugin );
 
 } )( jQuery );
