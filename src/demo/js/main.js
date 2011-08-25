@@ -1,19 +1,20 @@
-( function( $ ) {
-	
-	$( function () {
+(function($) {
+    "use strict";
+    /*globals jQuery */
 
-		$( "div" ).mousedown( function ( event ) {
+    $(function () {
 
-			event.stopPropagation();
-			event.preventDefault();
-			
-			if ( event.button === 0 ) {
-				$( this ).color();
-			} else if ( event.button === 1 ) {
-				$( this ).color( "border" );
-			}
-		} );
-	} );
+        $("div").mousedown(function (event) {
 
+            event.stopPropagation();
+            event.preventDefault();
 
-} )( jQuery );
+            if (event.button === 0) {
+                $(this).color();
+            } else if (event.button === 1) {
+                $(this).color("border");
+            }
+        });
+    });
+
+}(jQuery));
