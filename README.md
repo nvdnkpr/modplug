@@ -10,7 +10,8 @@ ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ### v0.5 · *2011-09-??*
 
-* 
+* removed jsLint comments
+* minor changes in demo
 
 
 ### v0.4 · *2011-08-25*
