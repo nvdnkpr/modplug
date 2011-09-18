@@ -1,6 +1,17 @@
-(function($) {
+/*
+ * ModPlug %BUILD_VERSION% - Demo Plugin Module
+ * http://larsjung.de/modplug
+ *
+ * provided under the terms of the MIT License
+ */
+
+
+/*
+ * Demo Plugin Module 'jQuery.color-border' starts here
+ */
+
+(function ($) {
     "use strict";
-    /*globals jQuery */
 
     var module = {
             methods: {

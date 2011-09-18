@@ -1,9 +1,20 @@
-/* ModPlug %BUILD_VERSION% minified */
-// @include "../../modplug-%BUILD_VERSION%.min.js"
+/*
+ * ModPlug %BUILD_VERSION% - Demo Plugin
+ * http://larsjung.de/modplug
+ *
+ * provided under the terms of the MIT License
+ */
 
-(function($) {
+
+// @include "../../modplug-%BUILD_VERSION%.js"
+
+
+/*
+ * Demo Plugin 'jQuery.color' starts here
+ */
+
+(function ($) {
     "use strict";
-    /*globals jQuery */
 
     var plugin = {
             statics: {
@@ -20,7 +31,6 @@
                     return "hsl(" + Math.floor(Math.random() * 360) + ",95%,75%)";
                 }
             },
-
             methods: {
                 front: function (col) {
 
@@ -37,12 +47,10 @@
                     });
                 }
             },
-
             defaultStatic: function () {
 
                 return "random";
             },
-
             defaultMethod: function () {
 
                 return "back";

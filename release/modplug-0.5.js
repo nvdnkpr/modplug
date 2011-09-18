@@ -1,5 +1,5 @@
 /*
- * ModPlug %BUILD_VERSION%
+ * ModPlug 0.5
  * http://larsjung.de/modplug
  *
  * provided under the terms of the MIT License
@@ -8,7 +8,7 @@
 (function (window, $) {
     "use strict";
 
-    var reference = "_ModPlug_%BUILD_VERSION%_API",
+    var reference = "_ModPlug_0.5_API",
         ModPlug = {
             plugin: function (namespace, options) {
 

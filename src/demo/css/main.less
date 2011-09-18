@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 
-@import "inc/html5reset";
+@import "inc/h5bp-norm";
 @import "inc/mixins";
 
 
@@ -9,6 +9,16 @@ body {
     font-family: Ubuntu, Arial, sans;
     font-size: 16px;
     color: #333;
+
+    a, a:active, a:visited {
+        color: #e44d26;
+        text-decoration: none;
+        .transition(all 0.2s ease-in-out);
+
+        &:hover {
+            color: #ff8d38;
+        }
+    }
 
     > h1 {
         font-family: 'Ubuntu';
@@ -38,15 +48,4 @@ body {
         text-shadow: 2px 2px 2px #fff;
     }
 }
-
-a, a:active, a:visited {
-    color: #e44d26;
-    text-decoration: none;
-    .transition(all 0.2s ease-in-out);
-
-    &:hover {
-        color: #ff8d38;
-    }
-}
-
 
