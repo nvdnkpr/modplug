@@ -8,6 +8,11 @@ ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ## Changelog
 
+### v0.6 · *2011-09-??*
+
+* 
+
+
 ### v0.5 · *2011-09-24*
 
 * removed JSLint comments, will pass with: --browser --confusion --predef jQuery --white
