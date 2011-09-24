@@ -1,6 +1,6 @@
-(function($) {
+
+(function ($) {
     "use strict";
-    /*globals jQuery */
 
     $(function () {
 
