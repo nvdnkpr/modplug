@@ -5,7 +5,7 @@
  * provided under the terms of the MIT License
  */
 
-(function (window, $) {
+(function ($) {
     "use strict";
 
     var reference = "_ModPlug_%BUILD_VERSION%_API",
@@ -94,4 +94,4 @@
 
     window.ModPlug = $.ModPlug = ModPlug;
 
-}(window, jQuery));
+}(jQuery));

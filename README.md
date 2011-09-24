@@ -10,13 +10,14 @@ ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ### v0.5 · *2011-09-??*
 
-* removed jsLint comments
+* removed JSLint comments, will pass with: --browser --confusion --predef jQuery --white
 * minor changes in demo
+* removed `release` folder
 
 
 ### v0.4 · *2011-08-25*
 
-* refactored to make it more accepted by jsLint
+* refactored to make it more accepted by JSLint
 * better compression
 
 
