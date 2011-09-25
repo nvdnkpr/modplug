@@ -9,6 +9,16 @@
     "use strict";
 
     var reference = "_ModPlug_%BUILD_VERSION%_API",
+        slice = Array.prototype.slice,
+        isFn = function (fn) {
+            return fn instanceof Function;
+        },
+        defaults = {
+            statics: {},
+            methods: {},
+            defaultStatic: undefined,
+            defaultMethod: undefined
+        },
         ModPlug = {
             /*
              * return code
@@ -23,20 +33,14 @@
                     return !namespace ? 1 : ($[namespace] ? 2 : 3);
                 }
 
-                var defaults = {
-                        statics: {},
-                        methods: {},
-                        defaultStatic: undefined,
-                        defaultMethod: undefined
-                    },
-                    settings = $.extend({}, defaults, options),
+                var settings = $.extend({}, defaults, options),
                     staticPlug = function () {
 
                         var args, defaultMethod;
 
-                        args = Array.prototype.slice.call(arguments);
-                        defaultMethod = settings.defaultStatic instanceof Function ? settings.defaultStatic.apply(this, args) : settings.defaultStatic;
-                        if (staticPlug[defaultMethod] instanceof Function) {
+                        args = slice.call(arguments);
+                        defaultMethod = isFn(settings.defaultStatic) ? settings.defaultStatic.apply(this, args) : settings.defaultStatic;
+                        if (isFn(staticPlug[defaultMethod])) {
                             return staticPlug[defaultMethod].apply(this, args);
                         }
                         $.error("Static method defaulted to '" + defaultMethod + "' does not exist on 'jQuery." + namespace + "'");
@@ -46,14 +50,14 @@
 
                         var args, defaultMethod;
 
-                        if (methods[method] instanceof Function) {
-                            args = Array.prototype.slice.call(arguments, 1);
+                        if (isFn(methods[method])) {
+                            args = slice.call(arguments, 1);
                             return methods[method].apply(this, args);
                         }
 
-                        args = Array.prototype.slice.call(arguments);
-                        defaultMethod = settings.defaultMethod instanceof Function ? settings.defaultMethod.apply(this, args) : settings.defaultMethod;
-                        if (methods[defaultMethod] instanceof Function) {
+                        args = slice.call(arguments);
+                        defaultMethod = isFn(settings.defaultMethod) ? settings.defaultMethod.apply(this, args) : settings.defaultMethod;
+                        if (isFn(methods[defaultMethod])) {
                             return methods[defaultMethod].apply(this, args);
                         }
                         $.error("Method '" + method + "' defaulted to '" + defaultMethod + "' does not exist on 'jQuery." + namespace + "'");
@@ -89,11 +93,7 @@
                     return !$[namespace] ? 1 : 2;
                 }
 
-                var defaults = {
-                        statics: {},
-                        methods: {}
-                    },
-                    settings = $.extend({}, defaults, options);
+                var settings = $.extend({}, defaults, options);
 
                 $[namespace][reference].addStatics(settings.statics).addMethods(settings.methods);
                 return 0;
