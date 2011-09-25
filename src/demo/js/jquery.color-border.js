@@ -9,7 +9,7 @@
 /*
  * Demo Plugin Module 'jQuery.color-border' starts here
  */
-
+/*globals jQuery */
 (function ($) {
     "use strict";
 

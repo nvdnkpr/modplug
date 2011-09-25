@@ -4,18 +4,22 @@
  *
  * provided under the terms of the MIT License
  */
-
+/*globals window, jQuery */
 (function ($) {
     "use strict";
 
     var reference = "_ModPlug_%BUILD_VERSION%_API",
         ModPlug = {
+            /*
+             * return code
+             *   0: ok
+             *   1: no namespace specified
+             *   2: static namespace not available
+             *   3: namespace not available
+             */
             plugin: function (namespace, options) {
 
                 if (!namespace || $[namespace] || $.fn[namespace]) {
-                    // 1: no namespace specified
-                    // 2: static namespace not available
-                    // 3: namespace not available
                     return !namespace ? 1 : ($[namespace] ? 2 : 3);
                 }
 
@@ -73,11 +77,15 @@
                 $.fn[namespace] = methodPlug;
                 return 0;
             },
+            /*
+             * return code
+             *   0: ok
+             *   1: namespace not found
+             *   2: namespace not a ModPlug plugin
+             */
             module: function (namespace, options) {
 
                 if (!$[namespace] || !$[namespace][reference]) {
-                    // 1: namespace not found
-                    // 2: namespace not a ModPlug plugin
                     return !$[namespace] ? 1 : 2;
                 }
 

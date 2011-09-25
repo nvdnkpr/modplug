@@ -10,7 +10,7 @@ ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ### v0.6 · *2011-09-??*
 
-* 
+* some comments
 
 
 ### v0.5 · *2011-09-24*

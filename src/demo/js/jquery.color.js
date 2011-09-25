@@ -12,7 +12,7 @@
 /*
  * Demo Plugin 'jQuery.color' starts here
  */
-
+/*globals jQuery */
 (function ($) {
     "use strict";
 
