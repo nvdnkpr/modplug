@@ -4,7 +4,7 @@
  *
  * provided under the terms of the MIT License
  */
-/*globals window, jQuery */
+/*globals jQuery */
 (function ($) {
     "use strict";
 
@@ -100,6 +100,6 @@
             }
         };
 
-    window.ModPlug = $.ModPlug = ModPlug;
+    $.ModPlug = ModPlug;
 
 }(jQuery));
