@@ -37,30 +37,43 @@
 
         <wepp file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.js" args="--nc" />
         <wepp file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.min.js" />
+        <copy file="${build.dir}/modplug.js" todir="${build.dir}/test" />
         <delete file="${build.dir}/modplug.js" />
     </target>
 
     <target name="build" depends="build-prepare">
         <!-- demo -->
-        <wepp.dir dir="${build.dir}/demo/css" />
-        <wepp.dir dir="${build.dir}/demo/js" />
-    </target>
-
-    <target name="build-uncompressed" depends="build-prepare">
-        <!-- demo -->
         <wepp.dir dir="${build.dir}/demo/css" args="--nc" />
         <wepp.dir dir="${build.dir}/demo/js" args="--nc" />
     </target>
 
-    <target name="release" depends="build-uncompressed">
+    <target name="release" depends="build">
         <mkdir dir="${release.dir}" />
-        <tar destfile="${release.dir}/${project.name}-${project.version}.tar" basedir="${build.dir}"/>
-        <gzip destfile="${release.dir}/${project.name}-${project.version}.tar.gz" src="${release.dir}/${project.name}-${project.version}.tar"/>
-        <delete file="${release.dir}/${project.name}-${project.version}.tar" />
         <zip destfile="${release.dir}/${project.name}-${project.version}.zip" basedir="${build.dir}" />
         <copy todir="${release.dir}">
             <fileset file="${build.dir}/${project.name}-*.js" />
         </copy>
+    </target>
+
+    <target name="pre-xint" depends="build-prepare">
+        <wepp file="${tool.jsxint.file}" tofile="${tool.jsxint.file}" args="--nc" />
+    </target>
+
+    <target name="lint" depends="pre-xint">
+        <echo>JSLint "${tool.jsxint.file}"</echo>
+        <exec executable="${tool.jslint}" failonerror="true">
+            <arg value="${tool.jsxint.file}" />
+        </exec>
+    </target>
+
+    <target name="hint" depends="pre-xint">
+        <echo>JSHint "${tool.jsxint.file}"</echo>
+        <exec executable="${tool.jshint}" failonerror="true">
+            <arg value="${tool.jsxint.file}" />
+        </exec>
+    </target>
+
+    <target name="xint" depends="lint,hint">
     </target>
 
 </project>

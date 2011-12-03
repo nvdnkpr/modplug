@@ -1,12 +1,21 @@
-# ModPlug
+# modplug
 
 * Website with download, docs and demo: <http://larsjung.de/modplug>
-* Sources: <http://github.com/lrsjng/ModPlug>
+* Sources: <http://github.com/lrsjng/modplug>
 
-ModPlug is provided under the terms of the [MIT License](http://github.com/lrsjng/ModPlug/blob/master/LICENSE.txt).
+modplug is provided under the terms of the [MIT License](http://github.com/lrsjng/modplug/blob/master/LICENSE.txt).
 
 
 ## Changelog
+
+### v0.6 · *2011-12-03*
+
+* changes syntax!
+* refactors and minifies code
+* add some comments
+* adds comments for JSLint and JSHint
+* adds some tests
+
 
 ### v0.5 · *2011-09-24*
 
