@@ -1,105 +1,77 @@
-/*
- * ModPlug %BUILD_VERSION%
- * http://larsjung.de/modplug
- *
- * provided under the terms of the MIT License
- */
-/*globals jQuery */
-(function ($) {
-    "use strict";
+/* %BUILD_NAME% %BUILD_VERSION% - http://larsjung.de/modplug - MIT License */
 
-    var reference = "_ModPlug_%BUILD_VERSION%_API",
-        slice = Array.prototype.slice,
-        isFn = function (fn) {
-            return fn instanceof Function;
-        },
-        defaults = {
-            statics: {},
-            methods: {},
-            defaultStatic: undefined,
-            defaultMethod: undefined
-        },
-        ModPlug = {
-            /*
-             * return code
-             *   0: ok
-             *   1: no namespace specified
-             *   2: static namespace not available
-             *   3: namespace not available
-             */
-            plugin: function (namespace, options) {
+/*jslint confusion: true, white: true */
+/*jshint confusion: true, white: false */
+/*global jQuery */
 
-                if (!namespace || $[namespace] || $.fn[namespace]) {
-                    return !namespace ? 1 : ($[namespace] ? 2 : 3);
-                }
+var modplug = (function ($) {
+    'use strict';
 
-                var settings = $.extend({}, defaults, options),
-                    staticPlug = function () {
+    /*
+     * return code
+     *   undefined: ok
+     *   1: no namespace specified or namespace not available
+     */
+    return function (namespace, options) {
 
-                        var args, defaultMethod;
+        // check if namespace is specified and available
+        if (!namespace || $[namespace] || $.fn[namespace]) {
+            return 1;
+        }
 
-                        args = slice.call(arguments);
-                        defaultMethod = isFn(settings.defaultStatic) ? settings.defaultStatic.apply(this, args) : settings.defaultStatic;
-                        if (isFn(staticPlug[defaultMethod])) {
-                            return staticPlug[defaultMethod].apply(this, args);
-                        }
-                        $.error("Static method defaulted to '" + defaultMethod + "' does not exist on 'jQuery." + namespace + "'");
-                    },
-                    methods = {},
-                    methodPlug = function (method) {
+        var extend = $.extend,
+            slice = Array.prototype.slice,
+            settings = extend({}, options),
 
-                        var args, defaultMethod;
+            // checks if argument fn is a function
+            isFn = function (fn) {
 
-                        if (isFn(methods[method])) {
-                            args = slice.call(arguments, 1);
-                            return methods[method].apply(this, args);
-                        }
-
-                        args = slice.call(arguments);
-                        defaultMethod = isFn(settings.defaultMethod) ? settings.defaultMethod.apply(this, args) : settings.defaultMethod;
-                        if (isFn(methods[defaultMethod])) {
-                            return methods[defaultMethod].apply(this, args);
-                        }
-                        $.error("Method '" + method + "' defaulted to '" + defaultMethod + "' does not exist on 'jQuery." + namespace + "'");
-                    },
-                    api = {
-                        addStatics: function (newStatics) {
-
-                            $.extend(staticPlug, newStatics);
-                            staticPlug[reference] = api;
-                            return this;
-                        },
-                        addMethods: function (newMethods) {
-
-                            $.extend(methods, newMethods);
-                            return this;
-                        }
-                    };
-
-                api.addStatics(settings.statics).addMethods(settings.methods);
-                $[namespace] = staticPlug;
-                $.fn[namespace] = methodPlug;
-                return 0;
+                return fn instanceof Function;
             },
-            /*
-             * return code
-             *   0: ok
-             *   1: namespace not found
-             *   2: namespace not a ModPlug plugin
-             */
-            module: function (namespace, options) {
 
-                if (!$[namespace] || !$[namespace][reference]) {
-                    return !$[namespace] ? 1 : 2;
+            findMethod = function (obj, args, defaultMethod, methods) {
+
+                var method = isFn(defaultMethod) ? defaultMethod.apply(obj, args) : defaultMethod;
+
+                if (isFn(methods[method])) {
+                    return methods[method].apply(obj, args);
+                }
+                $.error('Method "' + method + '" does not exist on jQuery.' + namespace);
+            },
+
+            // this function gets exposed as '$.<namespace>()'
+            statics = function () {
+
+                return findMethod(this, slice.call(arguments), settings.defaultStatic, statics);
+            },
+
+            // this function gets exposed as '$(selector).<namespace>()'
+            methods = function (method) {
+
+                if (isFn(methods[method])) {
+                    return methods[method].apply(this, slice.call(arguments, 1));
                 }
 
-                var settings = $.extend({}, defaults, options);
+                return findMethod(this, slice.call(arguments), settings.defaultMethod, methods);
+            },
 
-                $[namespace][reference].addStatics(settings.statics).addMethods(settings.methods);
-                return 0;
-            }
-        };
+            // add/overwrite plugin methods
+            // this method gets also exposed as '$.<namespace>.modplug' to make the plugin extendable
+            plug = function (options) {
 
-    $.ModPlug = ModPlug;
+                if (options) {
+                    extend(statics, options.statics);
+                    extend(methods, options.methods);
+                }
+
+                // make sure that '$.<namespace>.modplug' points to this function after adding new methods
+                statics.modplug = plug;
+            };
+
+        // init the plugin
+        plug(options);
+        $[namespace] = statics;
+        $.fn[namespace] = methods;
+    };
 
 }(jQuery));
