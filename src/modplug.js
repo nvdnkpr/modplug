@@ -1,77 +1,93 @@
-/* %BUILD_NAME% %BUILD_VERSION% - http://larsjung.de/modplug - MIT License */
+/*! //larsjung.de/modplug - %BUILD_VERSION% - MIT License */
 
 /*jslint confusion: true, white: true */
 /*jshint confusion: true, white: false */
 /*global jQuery */
 
-var modplug = (function ($) {
+// This function is ment to be copied into your plugin file as a local
+// variable.
+//
+// `modplug` expects a string `namespace` and a configuration object `options`.
+//
+//      options = {
+//          statics: hash of functions,
+//          methods: hash of functions,
+//          defaultStatic: String/function,
+//          defaultMethod: String/function
+//      }
+//
+// For more details see <http://larsjung.de/modplug>.
+var modplug = function (namespace, options) {
     'use strict';
 
-    /*
-     * return code
-     *   undefined: ok
-     *   1: no namespace specified or namespace not available
-     */
-    return function (namespace, options) {
+        // Some references to enhance minification.
+    var slice = [].slice,
+        $ = jQuery,
+        extend = $.extend,
+        isFn = $.isFunction,
 
-        // check if namespace is specified and available
-        if (!namespace || $[namespace] || $.fn[namespace]) {
-            return 1;
-        }
+        // Save the initial settings.
+        settings = extend({}, options),
 
-        var extend = $.extend,
-            slice = Array.prototype.slice,
-            settings = extend({}, options),
+        // Helper function to apply default methods.
+        applyMethod = function (obj, args, methodName, methods) {
 
-            // checks if argument fn is a function
-            isFn = function (fn) {
+            // If `methodName` is a function apply it to get the actual
+            // method name.
+            methodName = isFn(methodName) ? methodName.apply(obj, args) : methodName;
 
-                return fn instanceof Function;
-            },
+            // If method exists then apply it and return the result ...
+            if (isFn(methods[methodName])) {
+                return methods[methodName].apply(obj, args);
+            }
 
-            findMethod = function (obj, args, defaultMethod, methods) {
+            // ... otherwise raise an error.
+            $.error('Method "' + methodName + '" does not exist on jQuery.' + namespace);
+        },
 
-                var method = isFn(defaultMethod) ? defaultMethod.apply(obj, args) : defaultMethod;
+        // This function gets exposed as `$.<namespace>`.
+        statics = function () {
 
-                if (isFn(methods[method])) {
-                    return methods[method].apply(obj, args);
-                }
-                $.error('Method "' + method + '" does not exist on jQuery.' + namespace);
-            },
+            // Try to apply a default method.
+            return applyMethod(this, slice.call(arguments), settings.defaultStatic, statics);
+        },
 
-            // this function gets exposed as '$.<namespace>()'
-            statics = function () {
+        // This function gets exposed as `$(selector).<namespace>`.
+        methods = function (method) {
 
-                return findMethod(this, slice.call(arguments), settings.defaultStatic, statics);
-            },
+            // If `method` exists then apply it ...
+            if (isFn(methods[method])) {
+                return methods[method].apply(this, slice.call(arguments, 1));
+            }
 
-            // this function gets exposed as '$(selector).<namespace>()'
-            methods = function (method) {
+            // ... otherwise try to apply a default method.
+            return applyMethod(this, slice.call(arguments), settings.defaultMethod, methods);
+        },
 
-                if (isFn(methods[method])) {
-                    return methods[method].apply(this, slice.call(arguments, 1));
-                }
+        // Adds/overwrites plugin methods.
+        // This function gets exposed as `$.<namespace>.modplug` to make the plugin extendable.
+        plug = function (options) {
 
-                return findMethod(this, slice.call(arguments), settings.defaultMethod, methods);
-            },
+            if (options) {
+                extend(statics, options.statics);
+                extend(methods, options.methods);
+            }
 
-            // add/overwrite plugin methods
-            // this method gets also exposed as '$.<namespace>.modplug' to make the plugin extendable
-            plug = function (options) {
+            // Make sure that `$.<namespace>.modplug` points to this function after adding new methods.
+            statics.modplug = plug;
+        };
 
-                if (options) {
-                    extend(statics, options.statics);
-                    extend(methods, options.methods);
-                }
-
-                // make sure that '$.<namespace>.modplug' points to this function after adding new methods
-                statics.modplug = plug;
-            };
-
-        // init the plugin
-        plug(options);
-        $[namespace] = statics;
-        $.fn[namespace] = methods;
+    // Save objects or methods previously registered to the desired namespace.
+    // They are available via `$.<namespace>.modplug.prev`.
+    plug.prev = {
+        statics: $[namespace],
+        methods: $.fn[namespace]
     };
 
-}(jQuery));
+    // Init the plugin by adding the specified statics and methods.
+    plug(options);
+
+    // Register the plugin.
+    $[namespace] = statics;
+    $.fn[namespace] = methods;
+};

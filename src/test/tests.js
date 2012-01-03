@@ -17,16 +17,21 @@
 
         var ns0 = 'namespace0000',
             ns1 = 'namespace1111',
-            ns2 = 'namespace2222';
+            ns2 = 'namespace2222',
+            dummyStatics = {a: 0},
+            dummyMethods = {b: 1};
 
-        $[ns1] = {};
-        $.fn[ns2] = {};
+        $[ns1] = dummyStatics;
+        $.fn[ns1] = dummyMethods;
 
         $$.strictEqual(modplug(ns0), undefined, 'add new plugin');
-        $$.strictEqual(modplug(), 1, 'no namespace is specified');
-        $$.strictEqual(modplug(ns0), 1, 'namespace is already in use');
-        $$.strictEqual(modplug(ns1), 1, 'static namespace not available');
-        $$.strictEqual(modplug(ns2), 1, 'namespace not available');
+        $$.ok($[ns0].modplug !== undefined, 'modplug registerd');
+        $$.ok($[ns0].modplug.prev !== undefined, 'modplug.prev registerd');
+        $$.strictEqual($[ns0].modplug.prev.statics, undefined, 'modplug.prevs.statics is undefined');
+        $$.strictEqual($[ns0].modplug.prev.methods, undefined, 'modplug.prevs.methods is undefined');
+        $$.strictEqual(modplug(ns1), undefined, 'add plugin to a already taken namespace');
+        $$.strictEqual($[ns1].modplug.prev.statics, dummyStatics, 'modplug.prevs.statics is undefined');
+        $$.strictEqual($[ns1].modplug.prev.methods, dummyMethods, 'modplug.prevs.methods is undefined');
     });
 
     $$.test('statics and methods', function () {
@@ -46,9 +51,6 @@
                 }
             },
             $empty = $();
-
-        $$.ok($[ns] === undefined, 'static namespace available');
-        $$.ok($empty[ns] === undefined, 'namespace available');
 
         $$.strictEqual(modplug(ns, options), undefined, 'add new plugin');
 

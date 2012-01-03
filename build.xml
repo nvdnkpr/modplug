@@ -39,6 +39,10 @@
         <wepp file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.min.js" />
         <copy file="${build.dir}/modplug.js" todir="${build.dir}/test" />
         <delete file="${build.dir}/modplug.js" />
+
+        <exec executable="${tool.docco}" dir="${build.dir}" failonerror="true">
+            <arg value="${project.name}-${project.version}.js" />
+        </exec>
     </target>
 
     <target name="build" depends="build-prepare">

@@ -1,4 +1,4 @@
-/*
+/*!
  * %BUILD_NAME% %BUILD_VERSION% - Demo Plugin
  * http://larsjung.de/modplug
  *
