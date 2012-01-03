@@ -8,11 +8,19 @@ modplug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ## Changelog
 
+### v0.7 · *2012-01-03*
+
+* adds comments
+* removes return code, stores previous values instead
+* adds tests
+* adds docco to the build process
+
+
 ### v0.6 · *2011-12-03*
 
 * changes syntax!
 * refactors and minifies code
-* add some comments
+* adds some comments
 * adds comments for JSLint and JSHint
 * adds some tests
 
