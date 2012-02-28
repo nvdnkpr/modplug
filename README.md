@@ -8,6 +8,11 @@ modplug is provided under the terms of the [MIT License](http://github.com/lrsjn
 
 ## Changelog
 
+### v0.8 · *2012-01-??*
+
+* 
+
+
 ### v0.7 · *2012-01-03*
 
 * adds comments

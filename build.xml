@@ -1,83 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project
-    name="modplug"
-    basedir="."
-    default="release"
+	name="modplug"
+	basedir="."
+	default="release"
 >
 
-    <import file="tools/wepp.ant.xml" />
+	<target name="init">
+		<property file="build.properties" />
+		<tstamp>
+			<format property="build.stamp" pattern="yyyy-MM-dd-HHmmss" />
+		</tstamp>
+		<property name="build.label" value="${project.name} ${project.version} b${build.stamp}" />
+		<echo>Build: ${build.label}</echo>
+	</target>
 
-    <target name="init">
-        <property file="build.properties" />
-        <tstamp>
-            <format property="build.stamp" pattern="yyyy-MM-dd-HHmmss" />
-        </tstamp>
-        <property name="build.label" value="${project.name} ${project.version} b${build.stamp}" />
-        <echo>Build: ${build.label}</echo>
-    </target>
+	<target name="clean" depends="init">
+		<delete dir="${build.dir}" />
+		<delete dir="${release.dir}" />
+	</target>
 
-    <target name="clean" depends="init">
-        <delete dir="${build.dir}" />
-        <delete dir="${release.dir}" />
-    </target>
+	<target name="build" depends="clean">
+		<mkdir dir="${build.dir}" />
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}" />
+			<fileset file="LICENSE.txt" />
+			<fileset file="README.md" />
+		</copy>
+		<replace dir="${build.dir}">
+			<replacefilter token="%BUILD%" value="${build.label}" />
+			<replacefilter token="%BUILD_NAME%" value="${project.name}" />
+			<replacefilter token="%BUILD_VERSION%" value="${project.version}" />
+			<replacefilter token="%BUILD_STAMP%" value="${build.stamp}" />
+		</replace>
 
-    <target name="build-prepare" depends="clean">
-        <mkdir dir="${build.dir}" />
-        <copy todir="${build.dir}">
-            <fileset dir="${src.dir}" />
-            <fileset file="LICENSE.txt" />
-            <fileset file="README.md" />
-        </copy>
-        <replace dir="${build.dir}">
-            <replacefilter token="%BUILD%" value="${build.label}" />
-            <replacefilter token="%BUILD_NAME%" value="${project.name}" />
-            <replacefilter token="%BUILD_VERSION%" value="${project.version}" />
-            <replacefilter token="%BUILD_STAMP%" value="${build.stamp}" />
-        </replace>
+		<copy file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.js" />
+		<uglifyjs file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.min.js" />
 
-        <wepp file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.js" args="--nc" />
-        <wepp file="${build.dir}/modplug.js" tofile="${build.dir}/${project.name}-${project.version}.min.js" />
-        <copy file="${build.dir}/modplug.js" todir="${build.dir}/test" />
-        <delete file="${build.dir}/modplug.js" />
+		<copy file="${build.dir}/modplug.js" todir="${build.dir}/test" />
 
-        <exec executable="${tool.docco}" dir="${build.dir}" failonerror="true">
-            <arg value="${project.name}-${project.version}.js" />
-        </exec>
-    </target>
+		<docco dir="${build.dir}" files="${project.name}-${project.version}.js" />
+	</target>
 
-    <target name="build" depends="build-prepare">
-        <!-- demo -->
-        <wepp.dir dir="${build.dir}/demo/css" args="--nc" />
-        <wepp.dir dir="${build.dir}/demo/js" args="--nc" />
-    </target>
+	<target name="release" depends="build">
+		<mkdir dir="${release.dir}" />
+		<zip destfile="${release.dir}/${project.name}-${project.version}.zip" basedir="${build.dir}" />
+	</target>
 
-    <target name="release" depends="build">
-        <mkdir dir="${release.dir}" />
-        <zip destfile="${release.dir}/${project.name}-${project.version}.zip" basedir="${build.dir}" />
-        <copy todir="${release.dir}">
-            <fileset file="${build.dir}/${project.name}-*.js" />
-        </copy>
-    </target>
+	<target name="lint" depends="init">
+		<jslint file="${src.dir}/modplug.js" />
+	</target>
 
-    <target name="pre-xint" depends="build-prepare">
-        <wepp file="${tool.jsxint.file}" tofile="${tool.jsxint.file}" args="--nc" />
-    </target>
+	<macrodef name="uglifyjs">
+		<attribute name="file" />
+		<attribute name="tofile" />
+		<sequential>
+			<echo>uglifyjs @{file} -> @{tofile}</echo>
+			<exec executable="${tool.uglifyjs}" failonerror="true">
+				<arg value="-o" />
+				<arg value="@{tofile}" />
+				<arg value="@{file}" />
+			</exec>
+		</sequential>
+	</macrodef>
 
-    <target name="lint" depends="pre-xint">
-        <echo>JSLint "${tool.jsxint.file}"</echo>
-        <exec executable="${tool.jslint}" failonerror="true">
-            <arg value="${tool.jsxint.file}" />
-        </exec>
-    </target>
+	<macrodef name="docco">
+		<attribute name="dir" />
+		<attribute name="files" />
+		<sequential>
+			<exec executable="${tool.docco}" dir="@{dir}" failonerror="true">
+				<arg line="@{files}" />
+			</exec>
+		</sequential>
+	</macrodef>
 
-    <target name="hint" depends="pre-xint">
-        <echo>JSHint "${tool.jsxint.file}"</echo>
-        <exec executable="${tool.jshint}" failonerror="true">
-            <arg value="${tool.jsxint.file}" />
-        </exec>
-    </target>
-
-    <target name="xint" depends="lint,hint">
-    </target>
+	<macrodef name="jslint">
+		<attribute name="file" />
+		<sequential>
+			<echo>JSLint @{file}</echo>
+			<exec executable="${tool.jslint}" failonerror="false">
+				<arg value="@{file}" />
+			</exec>
+		</sequential>
+	</macrodef>
 
 </project>
