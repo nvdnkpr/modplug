@@ -46,9 +46,23 @@
 		<zip destfile="${release.dir}/${project.name}-${project.version}.zip" basedir="${build.dir}" />
 	</target>
 
-	<target name="lint" depends="init">
-		<jslint file="${src.dir}/modplug.js" />
+	<target name="jshint" depends="init">
+		<apply executable="${tool.jshint}" verbose="true" parallel="true">
+			<srcfile />
+			<arg line="--config jshint.json" />
+			<arg line="--show-non-errors" />
+			<fileset dir="${src.dir}">
+				<patternset>
+					<include name="modplug.js" />
+					<include name="test/tests.js" />
+					<include name="demo/main.js" />
+					<include name="demo/jquery.color.js" />
+					<include name="demo/jquery.color-border.js" />
+				</patternset>
+			</fileset>
+		</apply>
 	</target>
+
 
 	<macrodef name="uglifyjs">
 		<attribute name="file" />
@@ -69,16 +83,6 @@
 		<sequential>
 			<exec executable="${tool.docco}" dir="@{dir}" failonerror="true">
 				<arg line="@{files}" />
-			</exec>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="jslint">
-		<attribute name="file" />
-		<sequential>
-			<echo>JSLint @{file}</echo>
-			<exec executable="${tool.jslint}" failonerror="false">
-				<arg value="@{file}" />
 			</exec>
 		</sequential>
 	</macrodef>

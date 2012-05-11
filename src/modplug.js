@@ -4,7 +4,7 @@
 // variable.
 //
 // `modplug` expects a string `namespace` and a configuration object
-// ``options`.
+// `options`.
 //
 //      options = {
 //          statics: hash of functions,
@@ -15,9 +15,7 @@
 //
 // For more details see <http://larsjung.de/modplug>.
 var modplug = function (namespace, options) {
-'use strict';
-/*jslint confusion: true, white: true */
-/*global jQuery */
+	'use strict';
 
 		// Some references to enhance minification.
 	var slice = [].slice,

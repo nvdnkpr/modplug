@@ -11,7 +11,6 @@
 
 
 	var modplug = function (namespace, options) {
-		'use strict';
 
 			// Some references to enhance minification.
 		var slice = [].slice,
