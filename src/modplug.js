@@ -1,5 +1,5 @@
-/*! //larsjung.de/modplug - %BUILD_VERSION% - MIT License */
-
+//! //larsjung.de/modplug - %BUILD_VERSION% - MIT License
+;
 // This function is ment to be copied into your plugin file as a local
 // variable.
 //
